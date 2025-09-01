@@ -70,3 +70,4 @@ jobs:
         echo "✅ Network connectivity is working"
         echo "✅ Kubernetes context is accessible"
 
+
