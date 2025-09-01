@@ -1,0 +1,72 @@
+name: Test Basic Runner Functionality
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  test-basic-functionality:
+    name: Test Basic Runner
+    runs-on: self-hosted # 使用我们的 self-hosted runner
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Show system information
+      run: |
+        echo "=== System Information ==="
+        uname -a
+        cat /etc/os-release
+        echo "=== CPU Information ==="
+        nproc
+        lscpu | grep "Model name"
+        echo "=== Memory Information ==="
+        free -h
+        echo "=== Disk Information ==="
+        df -h
+        echo "=== Docker Information ==="
+        docker --version
+        docker info | grep "Containers\|Images\|Storage"
+        
+    - name: Test Docker functionality
+      run: |
+        echo "=== Testing Docker ==="
+        docker run --rm hello-world
+        echo "Docker test completed successfully!"
+        
+    - name: Test file operations
+      run: |
+        echo "=== Testing File Operations ==="
+        mkdir -p test-dir
+        echo "Hello from Rocky Linux 10.0!" > test-dir/test.txt
+        cat test-dir/test.txt
+        ls -la test-dir/
+        echo "File operations test completed successfully!"
+        
+    - name: Test network connectivity
+      run: |
+        echo "=== Testing Network Connectivity ==="
+        ping -c 3 8.8.8.8
+        curl -s https://httpbin.org/ip
+        echo "Network test completed successfully!"
+        
+    - name: Test Kubernetes context
+      run: |
+        echo "=== Testing Kubernetes Context ==="
+        kubectl get nodes
+        kubectl get pods -A | head -10
+        echo "Kubernetes context test completed successfully!"
+        
+    - name: Success message
+      run: |
+        echo "🎉 All basic functionality tests passed!"
+        echo "✅ Runner is working correctly on Rocky Linux 10.0"
+        echo "✅ Docker functionality is working"
+        echo "✅ File operations are working"
+        echo "✅ Network connectivity is working"
+        echo "✅ Kubernetes context is accessible"
+
